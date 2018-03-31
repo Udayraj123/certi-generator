@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<!-- saved from url=(0080)file:///C:/Users/Udayraj021/Desktop/webdworkshop/Session%203/Football/index.html -->
+<html moznomarginboxes mozdisallowselectionprint>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <!-- Bootstrap  -->
+  <link rel="stylesheet" href="assets/css/bootstrap.css">
+  <!-- Styling for this page -->
+  <link rel="stylesheet" href="main.css">
+  <!-- jQuery -->
+  <script src="assets/js/jquery.min.js"></script>
+  <!-- Bootstrap -->
+  <script src="assets/js/bootstrap.min.js"></script>
+  
+  <style>
+  /*
+TODO : 
+Flow : Load image;
+
+//Drag Text and Print
+Process before print: Replace textareas;
+// Add/Remove Texts (with close button)
+A Grid (invisible in print)
+Upload from CSV or paste text input
+
+Setting the image height/width
+Selecting Font
+*/
+</style>
+</head>
+
+<body>
+  <div class="row">
+    <div class="no-print col-md-3">
+
+      <div class="upload-btn-wrapper">
+        <button class="btn">Add Template</button>
+        <input type="file" id="browse" />
+      </div>
+
+      <div class="upload-btn-wrapper">
+        <div id="static-btn-grp">
+          <button class="btn createText"> Add Text Field </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-9">
+
+      <div class="full-page-print" id="field">
+        <img id="dummy" alt="Please add your template." >
+      </div>
+      
+    </div>
+    
+  </div>
+
+  <script>
+    var globalScreenWidth = window.innerWidth;
+    var globalScreenHeight = window.innerHeight;
+  </script>
+  
+  <script src="handle-img-upload.js"></script>
+
+  <script>
+    var text_counter=1;
+    var ball;
+    field = document.getElementById("field");
+    field.style.width = globalScreenWidth+"px"; 
+    field.style.height = globalScreenHeight+"px"; 
+
+    function focusBall(this_id){
+      if(typeof ball !== "undefined"){
+        ball.style.background="#00FF00";
+      }
+      ball = document.getElementById(this_id);
+      ball.style.background="yellow";
+    }
+
+    function createText()
+    {
+      field.style.cursor="pointer";
+      this_id = "text" + text_counter++;      
+      $('.select-text').removeClass('selected');
+      selectButton='<button class="btn selected select-text" data-id="'+this_id+'" >'+this_id+'</button>';
+      $('#static-btn-grp').append(selectButton);
+      // textInput = '<input type="text" value="'+this_id+'">';
+      textInput = '<p style="width:100px" contenteditable="true">'+this_id+'</p>';
+
+      textDiv = document.createElement('div');
+      textDiv.id=this_id;
+      textDiv.className="text";
+      textDiv.style.left="160px";
+      textDiv.style.border="solid 1px";
+      textDiv.innerHTML = textInput;
+      field.appendChild(textDiv);
+      console.log(this_id);
+      focusBall(this_id);
+      console.log(textDiv);
+    }    
+    // createText();
+
+    $("#static-btn-grp").on('click','.createText',function(event) {
+      createText();
+    });
+
+    $("#static-btn-grp").on('click','.select-text',function(event) {
+      $('.select-text').removeClass('selected');
+      $(this).addClass('selected');
+      this_id=$(this).attr('data-id');
+      console.log(this_id);
+      focusBall(this_id);
+    });
+
+    field.onclick = function(event) {
+
+      // window-relative field coordinates
+      let fieldCoords = this.getBoundingClientRect();
+
+      // the ball has position:absolute, the field: position:relative
+      // so ball coordinates are relative to the field inner left-upper corner
+      let ballCoords = {
+        top: event.clientY - fieldCoords.top - field.clientTop ,//- ball.clientHeight / 2,
+        left: event.clientX - fieldCoords.left - field.clientLeft// - ball.clientWidth / 2
+      };
+      // TODO: Take these up from Arrow keys as well
+
+      // prevent crossing the top field boundary
+      if (ballCoords.top < 0) ballCoords.top = 0;
+
+      // prevent crossing the left field boundary
+      if (ballCoords.left < 0) ballCoords.left = 0;
+
+      // // prevent crossing the right field boundary
+      if (ballCoords.left + ball.clientWidth > field.clientWidth) {
+        ballCoords.left = field.clientWidth - ball.clientWidth;
+      }
+
+      // prevent crossing the bottom field boundary
+      if (ballCoords.top + ball.clientHeight > field.clientHeight) {
+        ballCoords.top = field.clientHeight - ball.clientHeight;
+      }
+
+      ball.style.left = ballCoords.left + 'px';
+      ball.style.top = ballCoords.top + 'px';
+    }
+  </script>
+
+
+</body></html>

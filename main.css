@@ -1,0 +1,67 @@
+@media print {
+  @page {
+    margin:0 -6cm
+    size: landscape
+  }
+  .no-print, .no-print *
+  {
+    display: none !important;
+  }
+}
+
+#field {
+  height: 500px;
+  background-color: #00FF00;
+  position: relative;
+  overflow: hidden;  
+}
+
+.full-page-print {
+  page-break-before:always;
+  
+  position: absolute;
+  /*width: 100%;*/
+  float: left;
+  text-align: center;
+
+  page-break-after:always;
+}
+
+.text {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: all 0.7s;
+}
+
+input,textarea {
+  border: none;
+  background: transparent;
+}
+
+.upload-btn-wrapper {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.btn {
+  border: 2px solid gray;
+  color: gray;
+  background-color: white;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.selected {
+  background-color: yellow;
+}
+.upload-btn-wrapper input[type=file] {
+  font-size: 100px;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+}
