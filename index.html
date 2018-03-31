@@ -24,8 +24,10 @@ Upload from CSV or paste text input
 
 Setting the image height/width
 Selecting Font
+Some opacity and styling
 */
 </style>
+
 </head>
 
 <body>
@@ -33,10 +35,10 @@ Selecting Font
     <div class="no-print col-md-3">
 
       <div class="upload-btn-wrapper">
-        <button class="btn">Add Template</button>
+        <button class="btn">Load Template</button>
         <input type="file" id="browse" />
       </div>
-
+      &emsp;
       <div class="upload-btn-wrapper">
         <div id="static-btn-grp">
           <button class="btn createText"> Add Text Field </button>
@@ -47,7 +49,7 @@ Selecting Font
     <div class="col-md-9">
 
       <div class="full-page-print" id="field">
-        <img id="dummy" alt="Please add your template." >
+        <img id="dummy" alt="Please click 'Load Template' to add your template." >
       </div>
       
     </div>
@@ -62,6 +64,8 @@ Selecting Font
   <script src="handle-img-upload.js"></script>
 
   <script>
+
+
     var text_counter=1;
     var ball;
     field = document.getElementById("field");
@@ -81,7 +85,9 @@ Selecting Font
       field.style.cursor="pointer";
       this_id = "text" + text_counter++;      
       $('.select-text').removeClass('selected');
-      selectButton='<button class="btn selected select-text" data-id="'+this_id+'" >'+this_id+'</button>';
+
+      selectButton='<button class="btn selected select-text" data-id="'+this_id+'" >'+this_id+
+      '&emsp;<span class="close">X</span>'+'</button>';
       $('#static-btn-grp').append(selectButton);
       // textInput = '<input type="text" value="'+this_id+'">';
       textInput = '<p style="width:100px" contenteditable="true">'+this_id+'</p>';
@@ -93,23 +99,35 @@ Selecting Font
       textDiv.style.border="solid 1px";
       textDiv.innerHTML = textInput;
       field.appendChild(textDiv);
-      console.log(this_id);
+      // console.log(this_id);
       focusBall(this_id);
-      console.log(textDiv);
+      // console.log(textDiv);
     }    
     // createText();
+    $(function() {
 
-    $("#static-btn-grp").on('click','.createText',function(event) {
-      createText();
-    });
+      $("#static-btn-grp").on('click','.createText',function(event) {
+        createText();
+      });
 
-    $("#static-btn-grp").on('click','.select-text',function(event) {
-      $('.select-text').removeClass('selected');
-      $(this).addClass('selected');
-      this_id=$(this).attr('data-id');
-      console.log(this_id);
-      focusBall(this_id);
-    });
+      $("#static-btn-grp").on('click','.select-text',function(event) {
+        // you've not clicked on a descendant.
+        if (event.target !== this)
+          return;
+        $('.select-text').removeClass('selected');
+        $(this).addClass('selected');
+        this_id=$(this).attr('data-id');
+        console.log(this_id);
+        focusBall(this_id);
+      });
+
+      $("#static-btn-grp").on('click','.close',function(event) {
+        parent=$(this).parent();
+        this_id=$(parent).attr('data-id');
+        $('#'+this_id).remove();
+        parent.remove();
+      });   
+    });   
 
     field.onclick = function(event) {
 
