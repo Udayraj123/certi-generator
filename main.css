@@ -9,6 +9,28 @@
   }
 }
 
+
+/*@element '#field' {
+  .textDiv {
+    width: 50px;
+    background: red;
+    position: absolute;
+    top: eval('offsetTop + offsetHeight')px;
+    left: eval('offsetLeft + offsetWidth')px;
+  }
+}
+*/
+.full-page-print {
+  /*page-break-before:always;*/
+  /*width: 100%;*/
+  /*float: left;*/
+  /*text-align: center;*/
+  display: block;
+  page-break-after:always;
+  page-break-inside: avoid;
+
+}
+
 #field {
   height: 500px;
   background-color: #00FF00;
@@ -16,22 +38,26 @@
   overflow: hidden;  
 }
 
-.full-page-print {
-  page-break-before:always;
-  
+.textDiv {
+  /*position: relative; is positioned relative to its normal position.*/
+  /*position: absolute; is positioned relative to the nearest positioned ancestor
+  (instead of positioned relative to the viewport, like fixed).*/
+  /*
+  https://discourse.wicg.io/t/position-an-element-relatively-to-another-element-from-anywhere-in-the-dom/968/9
+  > Not much support yet
+  position: element(#rootElem)
+  */
+  z-index: 99;
+  max-width: 15%;
+  max-height: 5%;
   position: absolute;
-  /*width: 100%;*/
-  float: left;
-  text-align: center;
-
-  page-break-after:always;
+  transition: all 0.7s;
 }
 
-.text {
-  position: absolute;
-  left: 0;
-  top: 0;
-  transition: all 0.7s;
+.certiText {
+  /*position: absolute;*/
+  font-family: Verdana;
+  font-size: 20px;
 }
 
 input,textarea {
