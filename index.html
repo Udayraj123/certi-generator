@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0080)file:///C:/Users/Udayraj021/Desktop/webdworkshop/Session%203/Football/index.html -->
+<!-- saved from url=(0080)file:///C:/Users/Udayraj021/Desktop/webdworkshop/Session%203/Foottextbox/index.html -->
 <html moznomarginboxes mozdisallowselectionprint>
 <head>
   <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
@@ -7,37 +7,14 @@
   <link rel="stylesheet" href="assets/css/bootstrap.css">
   <!-- Styling for this page -->
   <link rel="stylesheet" href="main.css">
+  <!-- Fonts (Moved in main.css file) -->
+
   <!-- jQuery -->
   <script src="assets/js/jquery.min.js"></script>
   <!-- Bootstrap -->
   <script src="assets/js/bootstrap.min.js"></script>
-  
-  <style>
-  /*
-TODO : 
-Flow : Load image;
-
-// Drag Text and Print
-// Add/Remove Texts (with close button)
-// Put contenteditable- Replace textareas;
-Process before print: Maybe disable events if its too laggy?
-From an Hardcoded array
-Upload from CSV
-From Text area.
-Font Sizes!
-
-WSIWYG! -> Live move the textfields on all pages!
-
-Nope, Do margins instead- Setting the image height/width
-A Grid (invisible in print)
-Toggle Sidebar Controls
-Selecting Font 
-Some opacity and styling
-Toggles for UI - Text-centre, 
-Fine adjustments by Arrow keys
-*/
-</style>
-
+  <!-- Color Picker -->
+  <link rel="stylesheet" href="./assets/colourpicker/css/colourpicker.css">
 </head>
 
 <body>
@@ -55,28 +32,93 @@ Fine adjustments by Arrow keys
       </div>
       <hr>
       <div class="upload-btn-wrapper">
-        <button class="btn" style="color: maroon" onclick="window.location.href+=''"> Reset </button>
+        <button class="btn" style="color: maroon" onclick="window.location.href+=''"> Reset All </button>
       </div>
+      <hr>
+      <div class="upload-btn-wrapper">
+       <h4> <b>Change Font</b>
+         <button class="btn btn-tiny" style="color: maroon" onclick="makeSizer(2.5)"> + </button>
+         <button class="btn btn-tiny" style="color: maroon" onclick="makeSizer(-2.5)"> - </button>
+       </h4>
+       <select id='font-select' onChange = "return fontChange();"> </select>
+     </div>
+     <p>
+      <input id="titler" type="colour" placeholder="brown" value="black" aria-label="Header Colour">
+    </p>
+    <hr>
+    <div class="upload-btn-wrapper">
+      <button class="btn" style="color: maroon" onclick="doPrint(TextData)"> Print </button>
     </div>
-
-    <!-- Main play area -->
-    <div class="col-md-9">
-      <div class="full-page-print" id="field">
-        <img id="dummy" style="position: relative; top: 0px; left:0px;" alt="Please click 'Load Template' to add your template." >
-      </div>
+    <hr>
+    <div class="upload-btn-wrapper">
+      <button class="btn btn-tiny" style="color: maroon"> <a target="_blank" href="https://www.youtube.com/watch?v=ZfrQRjsW6oU"> Alternative (using MS Word) </a></button>
     </div>
-    
+    <hr>
   </div>
 
-  <script>
-    var globalScreenWidth = window.innerWidth;
-    var globalScreenHeight = window.innerHeight;
-    var TextData = [
-    ['text-1-1','text-1-2','text-1-3'],
-    ['text-2-1','text-2-2','text-2-3'],
-    ['text-3-1','text-3-2','text-3-3'],
-    ];
+  <!-- Main play area -->
+  <div class="col-md-9">
+    <div class="full-page-print" id="field">
+      <img id="dummy" style="position: relative; top: 0px; left:0px;height: 100%;width: 100%" alt="Please click 'Load Template' to add your template." >
+    </div>
+  </div>
 
+</div>
+
+<script type="text/javascript">
+// Utilities
+$.fn.exists = function () {
+  return this.length !== 0;
+}
+</script>
+<script src="./assets/js/font-select.js"></script>
+<script type="text/javascript">
+  // For font change
+  var textSelector = ".certiText";
+  var fontSelect = document.getElementById("font-select");
+  function fontChange(){
+    if($(textSelector).exists()){
+      var x = fontSelect.selectedIndex;
+      var y = fontSelect.options;
+      $(textSelector).css("font-family",y[x].value);
+    }  
+  }  
+  var fontSizeInt=20;// default font size
+  function makeSizer(size) {
+    if($(textSelector).exists()){
+      fontSizeInt = parseFloat($(textSelector).css('font-size').replace('px', ''));
+      // console.log(fontSizeInt);
+      $(textSelector).css('font-size', (fontSizeInt+ size) + 'px');
+    }
+  }
+</script>
+
+<script src="./assets/colourpicker/js/tinycolor.js" ></script>
+<script src="./assets/colourpicker/js/colourpicker.js" ></script>
+<script>
+  var $titlePicker = $('#titler');
+  $titlePicker.on('change', function() {
+    $(textSelector).css('color', $titlePicker.colourPicker('val'));
+    // var $siteHeader  = $(textSelector);
+    // if ($titlePicker.colourPicker('isDark')) {
+    //   $siteHeader.css('background-color', 'white');
+    // } else {
+    //   $siteHeader.css('background-color', 'black');
+    // }
+  }).change();
+</script>
+
+<script>
+
+  var globalScreenWidth = window.innerWidth;
+  var globalScreenHeight =  window.innerHeight;
+  var TextData = [
+  ['text-1-1','text-1-2','text-1-3'],
+  ['text-2-1','text-2-2','text-2-3'],
+  ['text-3-1','text-3-2','text-3-3'],
+  ];
+  var textboxMarginTop=0;
+  var textboxMarginLeft=0;
     /*
   M1 - Use selector to loop on text inputs. And on those indices put the corresponding text. Should do.
   Outer loop would still be on the rows.
@@ -93,11 +135,14 @@ Fine adjustments by Arrow keys
         var clonedDiv = $('#field').clone();
         field_id="field" + (row_no + 1);
         clonedDiv.attr("id", field_id);
-        parent.append("<br>");
+        // parent.append("<br>");
         parent.append(clonedDiv);
         thisImg = $('#'+field_id +' img');
         thisImg.attr("id","dummy"+temp++);
-        
+        // img{display: block; height: 100%;}
+        thisImg.css('display','block');
+        thisImg.css('height','100%');
+
         // DEBUG THIS
         allCertiTexts = $('#'+field_id +' .certiText');
       // console.log(row_no);
@@ -110,65 +155,71 @@ Fine adjustments by Arrow keys
       
       allTextDivs = $('#'+field_id +' .textDiv');
       allTextDivs.each(function(i,e){
+        $(e).css('border','none');
         currTop = $(e).position().top;// currTop = parseFloat($(e).css('top'));
         $(e).css('top',currTop + row_no*globalScreenHeight);
         console.log(currTop + row_no*globalScreenHeight);
       });
       
     });
-  $('#field').remove();
-} else{
-  console.log("Already processed input, continuing to print");
-}
+      $('#field').remove();
+    } else{
+      console.log("Already processed input, continuing to print");
+    }
 // window.print();
+
 }
 
 </script>
-
-<script src="handle-img-upload.js"></script>
+<script src="./assets/js/handle-img-upload.js"></script>
 
 <script>
 
 
   var text_counter=1;
-  var ball;
+  var textbox;
   field = document.getElementById("field");
   field.style.width = globalScreenWidth+"px"; 
   field.style.height = globalScreenHeight+"px"; 
 
-  function focusBall(this_id){
-    if(typeof ball !== "undefined"){
-      ball.style.background="#00FF00";
+  function focusTextBox(this_id){
+    if(typeof textbox !== "undefined"){
+      textbox.style.background="rgba(1,1,1,0.1)";
     }
-    ball = document.getElementById(this_id);
-    ball.style.background="yellow";
+    textbox = document.getElementById(this_id);
+    textbox.style.background="rgba(1,1,1,0.3)";
   }
 
   function createText()
   {
       // field.style.cursor="pointer";
-      this_id = "text" + text_counter++;      
+      this_id = "column" + text_counter++;      
       $('.select-text').removeClass('selected');
 
       selectButton='<button class="btn selected select-text" data-id="'+this_id+'" >'+this_id+
       '&emsp;<span class="close">X</span>'+'</button>';
       $('#static-btn-grp').append(selectButton);
       // textInput = '<input class="certiText" type="text" value="'+this_id+'">';
-      textInput = '<p class="certiText" style="width:100px" contenteditable="true">'+this_id+'</p>';
+      textInput = '<p class="certiText" style="width:100px;" >'+this_id+'</p>';
+      //^ contenteditable="true"
 
       textDiv = document.createElement('div');
       textDiv.id=this_id;
       textDiv.className="textDiv";
-      textDiv.style.left="1%";
-      textDiv.style.top="1%";
-      textDiv.style.border="solid 1px";
+      textDiv.style.left="0.1%";
+      textDiv.style.top="0.1%";      
       textDiv.innerHTML = textInput;
       // field.appendChild(textDiv);
       // textDiv.insertBefore($('#dummy'));
       $('#dummy').before(textDiv);
+      
       // console.log(this_id);
-      focusBall(this_id);
       // console.log(textDiv);
+      // Trigger events
+      focusTextBox(this_id);
+      $titlePicker.change();
+      fontChange();
+      makeSizer(0);
     }    
     // createText();
     $(function() {
@@ -185,7 +236,7 @@ Fine adjustments by Arrow keys
         $(this).addClass('selected');
         this_id=$(this).attr('data-id');
         // console.log(this_id);
-        focusBall(this_id);
+        focusTextBox(this_id);
       });
 
       $("#static-btn-grp").on('click','.close',function(event) {
@@ -201,32 +252,32 @@ Fine adjustments by Arrow keys
       // window-relative field coordinates
       let fieldCoords = this.getBoundingClientRect();
 
-      // the ball has position:absolute, the field: position:relative
-      // so ball coordinates are relative to the field inner left-upper corner
-      let ballCoords = {
-        top: event.clientY - fieldCoords.top - field.clientTop - ball.clientHeight / 2,
-        left: event.clientX - fieldCoords.left - field.clientLeft - ball.clientWidth / 2
+      // the textbox has position:absolute, the field: position:relative
+      // so textbox coordinates are relative to the field inner left-upper corner
+      let textboxCoords = {
+        top: event.clientY - fieldCoords.top - field.clientTop + textboxMarginTop //- textbox.clientHeight / 2
+        ,left: event.clientX - fieldCoords.left - field.clientLeft + textboxMarginLeft //- textbox.clientWidth / 2
       };
       // TODO: Take these up from Arrow keys as well
 
       // prevent crossing the top field boundary
-      if (ballCoords.top < 0) ballCoords.top = 0;
+      if (textboxCoords.top < 0) textboxCoords.top = 0;
 
       // prevent crossing the left field boundary
-      if (ballCoords.left < 0) ballCoords.left = 0;
+      if (textboxCoords.left < 0) textboxCoords.left = 0;
 
       // // prevent crossing the right field boundary
-      if (ballCoords.left + ball.clientWidth > field.clientWidth) {
-        ballCoords.left = field.clientWidth - ball.clientWidth;
+      if (textboxCoords.left + textbox.clientWidth > field.clientWidth) {
+        textboxCoords.left = field.clientWidth - textbox.clientWidth;
       }
 
       // prevent crossing the bottom field boundary
-      if (ballCoords.top + ball.clientHeight > field.clientHeight) {
-        ballCoords.top = field.clientHeight - ball.clientHeight;
+      if (textboxCoords.top + textbox.clientHeight > field.clientHeight) {
+        textboxCoords.top = field.clientHeight - textbox.clientHeight;
       }
 
-      ball.style.left = ballCoords.left + 'px';
-      ball.style.top = ballCoords.top + 'px';
+      textbox.style.left = textboxCoords.left + 'px';
+      textbox.style.top = textboxCoords.top + 'px';
     }
   </script>
 

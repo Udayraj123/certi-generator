@@ -1,0 +1,202 @@
+-
+  var setup = `<link rel="stylesheet" href="colourpicker.css">
+  <script src="jquery.min.js"></script>
+  <script src="tinycolor.js"></script>
+  <script src="colourpicker.js"></script>
+  `;
+
+  var options = `$('#input').colourPicker({
+    autoSliders   : true,
+    fallback      : 'black',
+    fallbackAlpha : 'transparent',
+    forceHex      : false,
+    matchInput    : false,
+    noAlpha       : false,
+    useLastValid  : true,
+  });`;
+
+  var methods = `$('#input').colourPicker('val' [, string]);
+  $('#input').colourPicker('hue' [, 0-360]);
+  $('#input').colourPicker('saturation' [, 0-1]);
+  $('#input').colourPicker('value' [, 0-1]);
+  $('#input').colourPicker('alpha' [, 0-1]);
+  $('#input').colourPicker('isDark');
+  $('#input').colourPicker('show');
+  $('#input').colourPicker('hide');
+  $('#input').colourPicker('toggle');
+  $('#input').colourPicker('destroy');
+  `;
+
+p Finally, a usable (accessible, rational, and responsive) colour picker for the web.
+p
+  input#titler(type="colour" placeholder="brown" value="gold" aria-label="Header Colour")
+p
+  a.button_github(role="button", href="https://github.com/jasonhibbs/colourpicker.git")
+    i
+      svg.octicon.octicon-mark-github(version='1.1', width='14', height='14', viewbox='0 0 16 16', aria-hidden='true')
+        path(fill-rule='evenodd', d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z')
+    span View on GitHub
+  |
+  |
+  a.button_github(role="button", href="https://github.com/jasonhibbs/colourpicker/archive/master.zip")
+    i
+      svg.octicon.octicon-mark-github(version='1.1', width='14', height='14', viewbox='0 0 16 16', aria-hidden='true')
+        path(fill-rule='evenodd', d='M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z')
+    span Download .zip
+
+hr
+h2 Why?
+
+p I’ve not liked a single colour picker plugin I’ve found, and #[a(href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color") #[code #{'<input type="color"/>'}] is useless to me].
+p The premise is simple: let people type their colour, or let them find one using a #[a(href="https://en.wikipedia.org/wiki/HSL_and_HSV") model designed with humans in mind].
+
+
+
+
+
+hr
+h2 Setup
+
+p Add the required files…
+p
+  pre._code
+    code= setup
+p Then…
+p
+  pre._code._larger
+    code #{'<input type="colour"/>'}
+
+p Include #[a(href="https://jquery.com/download/") jQuery], #[a(href="https://github.com/bgrins/TinyColor") TinyColor], and the ColourPicker files, and simply put an #[code #{'<input type="colour"/>'}] wherever you need one, or initialise an input with #[code #{"$('#input').colourPicker(options)"}].
+p Yes, that's the Old French spelling.
+
+
+h3.h4 Compatibility
+
+p It’s for the modern browsers, for sure. Here’s why:
+ul
+  li #[a(href="https://caniuse.com/#feat=input-range") Sliders are range inputs]
+  li #[a(href="https://caniuse.com/#feat=calc") Some gradients use calc()]
+
+
+
+hr
+h2 Examples
+
+label
+  p #[code #{'<input type="colour" placeholder="transparent" />'}]
+  p
+    input(type="colour" placeholder="transparent")
+label
+  p #[code #{'<input type="colour" no-alpha="true" value="dimgrey" />'}]
+  p
+    input(type="colour" no-alpha="true" value="dimgrey")
+label
+  p #[code #{'<input type="colour" placeholder="transparent" />'}]
+  p
+    input(type="colour" placeholder="gold" value="#44f")
+label
+  p #[code #{'<input type="colour" placeholder="black" disabled />'}]
+  p
+    input(type="colour" placeholder="black" disabled)
+label
+  p Magic 🌈
+  p
+    input#magic(type="colour" placeholder="yellow")
+
+
+
+
+
+
+
+
+
+
+
+hr
+h2 Options
+
+pre._code
+  code= options
+
+h3.h4 Attributes
+
+h4.h6
+  code [placeholder="skyblue"]
+p The placeholder attribute is used as fallback when no input is given.
+
+h4.h6
+  code [no-alpha="true"]
+p Disables the alpha slider, disallows non-opaque colour. Same as #[code noAlpha: true].
+
+
+
+
+
+
+
+
+
+hr
+h2 Methods
+
+pre._code
+  code= methods
+
+h3.h5 Colour
+p get: #[code #{"$('input').colourPicker('val'); => 'blue'"}]
+p set: #[code #{"$('input').colourPicker('val', 'red');"}]
+p This is the current internal value of the ColourPicker, rather than what is in the input.
+
+h3.h5 Hue
+p get: #[code #{"$('input').colourPicker('hue');"}]
+p set: #[code #{"$('input').colourPicker('hue', 360);"}]
+
+h3.h5 Saturation
+p get: #[code #{"$('input').colourPicker('saturation');"}]
+p set: #[code #{"$('input').colourPicker('saturation', 1);"}]
+
+h3.h5 Value (as in, HSV)
+p get: #[code #{"$('input').colourPicker('value');"}]
+p set: #[code #{"$('input').colourPicker('value', 1);"}]
+
+h3.h5 Alpha
+p get: #[code #{"$('input').colourPicker('alpha');"}]
+p set: #[code #{"$('input').colourPicker('alpha', 1);"}]
+
+h3.h5 isDark
+p #[code #{"$('input').colourPicker('show'); // true or false"}]
+p This is how we know if the arrow should be black or white for contrast
+
+h3.h5 Show Controls
+p #[code #{"$('input').colourPicker('show');"}]
+
+h3.h5 Hide Controls
+p #[code #{"$('input').colourPicker('hide');"}]
+
+h3.h5 Toggle Controls
+p #[code #{"$('input').colourPicker('toggle');"}]
+
+
+
+
+
+
+
+
+hr
+h2 Style
+
+p ColourPicker is designed to inherit existing input styles. The included LESS is minimal on the text input, and very basic for the slider popover. #[a(href="https://codepen.io/jasonhibbs/full/LdEXrm/") Here’s a minimal CSS demo].
+p Since we’re using #[code #{'input[type=range]'}] for the sliders, it is only compatible in recent browsers that allow styles here.
+p The particular style of this demo comes from my other project #[a(href="https://github.com/jasonhibbs/Pugless") Pugless] with only the addition of a focus style for the swatch button.
+
+
+
+
+
+hr
+h2 Is that it?
+
+p I’m not a level 99 javascript developer so I’d appreciate that kind of feedback.
+p I have a few other to-dos.

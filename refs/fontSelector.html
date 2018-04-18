@@ -1,0 +1,70 @@
+	<!-- Source: https://codepen.io/MetAteM/pen/WrdWYJ -->
+	<head>
+		<style type="text/css">
+
+			@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+			@import url("https://fonts.googleapis.com/css?family=Lobster|Playfair+Display|Aladin|Alex Brush|Almendra Display|Astloch|Space Mono|Spirax|Bigshot One|BioRhyme|Bonbon|Cherry Swash|Stalemate|Cinzel Decorative|Clicker Script|Cookie|Cormorant Upright|Ewert|Pattaya|Sacramento|Redressed|Diplomata|Elsie Swash Caps|Cutive|Damion|Dancing Script|Amita|Antic Didone|Asset|Raleway|Aclonica|Roboto|Ubuntu");
+
+			body{
+				margin: 0px;
+				background-image : url(	"http://thedigitalyardsale.com/freebies/7-17/old_paper6.jpg");
+				background-size: 100% 100%;
+				margin: 0px;
+				text-shadow: -1px 0 #fff, 0 1px #fff, 1px 0 #fff, 0 -1px #fff;
+			}
+			select{
+				font-size: 30px;
+			}
+			#page{
+				height: 100vh;
+				width: 100vw;
+				position: absolute;
+				display: -webkit-flex;
+				display: flex;
+				text-align: center;
+			}
+			#container{
+				width: 100vw;
+				-webkit-align-self: center;
+				align-self: center;
+			}
+
+		</style>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Montez|Lobster|Josefin+Sans|Shadows+Into+Light|Pacifico|Amatic+SC:700|Orbitron:400,900|Rokkitt|Righteous|Dancing+Script:700|Bangers|Chewy|Sigmar+One|Architects+Daughter|Abril+Fatface|Covered+By+Your+Grace|Kaushan+Script|Gloria+Hallelujah|Satisfy|Lobster+Two:700|Comfortaa:700|Cinzel|Courgette' rel='stylesheet' type='text/css'>
+
+	</head>
+
+	<div id = "page">
+		<div id = "container">
+			<h1 style = "font-size: 50px;">Font selector</h1>
+			<div id = "text">
+				<h1 id = "h1">Grumpy wizards make toxic brew for the evil Queen and Jack.</h1>
+				<h2 id = "h2">Grumpy wizards make toxic brew for the evil Queen and Jack.</h2>
+				<h3 id = "h3">Grumpy wizards make toxic brew for the evil Queen and Jack.</h3>
+				<h4 id = "h4">Grumpy wizards make toxic brew for the evil Queen and Jack.</h4>
+				<div id = "standard">Grumpy wizards make toxic brew for the evil Queen and Jack.</div><br>
+			</div>
+			<select id = 'fontSelect' onChange = "return fontChange();">
+			</select>
+		</div>
+	</div>
+	<script type="text/javascript">
+		var fonts = ["Montez","Lobster","Josefin Sans","Shadows Into Light","Pacifico","Amatic SC", "Orbitron", "Rokkitt","Righteous","Dancing Script","Bangers","Chewy","Sigmar One","Architects Daughter","Abril Fatface","Covered By Your Grace","Kaushan Script","Gloria Hallelujah","Satisfy","Lobster Two","Comfortaa","Cinzel","Courgette",
+		"arial", "sans-serif", "playfair Display", "roboto", "raleway", "ubuntu", "lobster", "aclonica", "aladin", "alex brush", "almendra display", "astloch", "space mono", "spirax", "bigshot one", "biorhyme", "bonbon", "cherry swash", "stalemate", "Cinzel Decorative", "Clicker Script", "Cookie", "Cormorant Upright", "ewert", "pattaya", "sacramento", "redressed", "diplomata", "elsie swash caps", "cutive", "damion", "dancing script", "amita", "antic didone"]; 
+		
+		var select = document.getElementById("fontSelect")
+		for(var a = 0; a < fonts.length ; a++){
+			var opt = document.createElement('option');
+			opt.value = opt.innerHTML = fonts[a];
+			opt.style.fontFamily = fonts[a];
+			select.add(opt);
+		}
+		function fontChange(){
+			var x = document.getElementById("fontSelect").selectedIndex;
+			var y = document.getElementById("fontSelect").options;
+			document.body.insertAdjacentHTML("beforeend", "<style> #text{ font-family:'"+y[x].text+"';}"+
+				"#select{font-family:'"+y[x].text+"';</style>");
+		}
+		fontChange();
+	</script>

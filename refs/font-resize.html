@@ -1,0 +1,106 @@
+<!-- Source: https://codepen.io/grzegorzem/pen/rYvByg-->
+<head>
+  <style type="text/css">
+ 
+ul {
+  top: 5px;
+  left: 5px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+li {
+  border: 1px solid black;
+  padding: 5px 10px;
+  display: inline-block;
+  font-size: 12px;
+
+}
+
+li > a, a:link, a:active, a:hover, a:visited {
+  text-decoration: none;
+  color: black;
+}
+
+#sizePlus > li {
+  background-color: #c9ffc9;
+}
+#sizeMinus > li {
+  background-color: #ffc9c9;
+}
+#sizeReset > li {
+  background-color: #fffac9;
+}
+
+  </style>
+</head>
+
+<header>
+  <ul>
+    <a href="#" id="sizeMinus"><li>-</li></a>
+    <a href="#" id="sizePlus"><li>+</li></a>    
+    <a href="#" id="sizeReset"><li>reset</li></a>
+  </ul>
+</header>
+<main id="content">
+  <h1>Lorem Ipsum</h1>
+  <h2>"Neque porro quisquam est qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit..."</h2>
+  <p>
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  </p>
+</main>
+
+<script type="text/javascript">
+  
+/*
+ * Simple Javascript solution for increasing or decreasing font size
+ * in whole HTML document using base font size in pixels on the parent
+ * element in combination with relative units.
+ */
+
+(function() {
+  // set font-size of html tag to a value
+  function getBodyFontSize() {
+    const htmlTag = "body"; // body is the tag which holds base font-size in pixels
+    
+    const elem = document.querySelector(htmlTag);
+    
+    // get font-size value from computed style
+    // eg. store initial value of elem's font-size when page is loaded
+    // to be able to reset it default value
+    // https://developer.mozilla.org/en-US/docs/Web/API/Window/getComputedStyle
+    const defFontSize = window.getComputedStyle(elem, null).getPropertyValue('font-size');
+    return parseInt(defFontSize);
+  }
+  
+  var fontsize = getBodyFontSize();
+  
+  // store elem's font-size in global context to access it from outside of this function
+  // as a string, for example '12px'
+  window.bodyFontSize = fontsize + 'px';
+})();
+
+
+function makeSizer(size) {
+  return function() {
+    let elem = document.querySelector("body");
+    let elemFontSize = window.getComputedStyle(elem, null).getPropertyValue('font-size');
+    let fontSizeInt = parseInt(elemFontSize);
+    
+    if (size === 0) {
+      document.body.style.fontSize = window.bodyFontSize;
+    } else {
+      document.body.style.fontSize = fontSizeInt + size + 'px';
+    }
+  }
+}
+
+let sizePlus = makeSizer(1); // increase
+let sizeMinus = makeSizer(-1); // decrease
+let sizeReset = makeSizer(0); // reset to the default value as it is in CSS
+
+document.querySelector('#sizePlus').onclick = sizePlus;
+document.querySelector('#sizeMinus').onclick = sizeMinus;
+document.querySelector('#sizeReset').onclick = sizeReset;
+
+</script>

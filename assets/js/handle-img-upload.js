@@ -1,6 +1,6 @@
 window.URL    = window.URL || window.webkitURL;
 var elBrowse  = document.getElementById("browse"),
-    elPreview = document.getElementById("field"),
+elPreview = document.getElementById("field"),
     useBlob   = false && window.URL; // Set to `true` to use Blob instead of Data-URL
 
 // 2.
@@ -29,10 +29,12 @@ function readImage (file) {
           bg_image.height +' '+
           file.type    +' '+
           Math.round(file.size/1024) +'KB';
-
-      bg_image.width=globalScreenWidth;
+          console.log(imageInfo);
+      //width distorts portrait mode certis
+      
+      // bg_image.width=globalScreenWidth;
       bg_image.height=globalScreenHeight;
-      dummy.width=globalScreenWidth;
+      // dummy.width=globalScreenWidth;
       dummy.height=globalScreenHeight;
       // Finally append our created bg_image and the HTML info string to our `#preview` 
       // elPreview.style.width = bg_image.width+"px"; 

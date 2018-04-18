@@ -1,0 +1,38 @@
+<title>ColourPicker.js</title>
+<link rel="stylesheet" href="demo/src/css/style.css">
+<body>
+  <header role="banner">
+    <div class="layout">
+      <h1>ColourPicker.js</a></h1>
+      <p>A jQuery plugin for colour inputs</p>
+    </div>
+  </header>
+  <main>
+    <div class="layout">
+      <p>Finally, a usable (accessible, rational, and responsive) colour picker for the web.</p>
+      <p>
+        <input id="titler" type="colour" placeholder="brown" value="gold" aria-label="Header Colour">
+      </p>
+    </main>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.$ || document.write('<script src="demo/src/js/jquery-3.3.1.min.js"><\/script>')</script>
+
+    <script src="demo/src/js/tinycolor.js" ></script>
+    <script src="colourpicker/colourpicker.js" ></script>
+    <script type="text/javascript">
+
+      // Titler ---------------------------------------------------------
+      var $siteHeader  = $('body > header'),
+      $titlePicker = $('#titler');
+
+      $titlePicker.on('change', function() {
+        $siteHeader.css('background-color', $titlePicker.colourPicker('val'));
+
+        if ($titlePicker.colourPicker('isDark')) {
+          $siteHeader.css('color', 'white');
+        } else {
+          $siteHeader.css('color', 'black');
+        }
+      }).change();
+    </script>
+  </body>

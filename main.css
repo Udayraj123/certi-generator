@@ -1,3 +1,11 @@
+/*Font selector stuff */
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700");
+@import url("https://fonts.googleapis.com/css?family=Lobster|Playfair+Display|Aladin|Alex Brush|Almendra Display|Astloch|Space Mono|Spirax|Bigshot One|BioRhyme|Bonbon|Cherry Swash|Stalemate|Cinzel Decorative|Clicker Script|Cookie|Cormorant Upright|Ewert|Pattaya|Sacramento|Redressed|Diplomata|Elsie Swash Caps|Cutive|Damion|Dancing Script|Amita|Antic Didone|Asset|Raleway|Aclonica|Roboto|Ubuntu");
+@import url("https://fonts.googleapis.com/css?family=Montez|Lobster|Josefin+Sans|Shadows+Into+Light|Pacifico|Amatic+SC:700|Orbitron:400,900|Rokkitt|Righteous|Dancing+Script:700|Bangers|Chewy|Sigmar+One|Architects+Daughter|Abril+Fatface|Covered+By+Your+Grace|Kaushan+Script|Gloria+Hallelujah|Satisfy|Lobster+Two:700|Comfortaa:700|Cinzel|Courgette");
+#font-select{
+  font-size: 22px;
+}
+/*Handle Print page*/
 @media print {
   @page {
     margin:0 -6cm
@@ -7,6 +15,16 @@
   {
     display: none !important;
   }
+  
+  .full-page-print,img{ 
+    max-height: 100%;
+    width:100%;
+  }
+
+  *:focus {
+    outline: none;
+  }
+
 }
 
 
@@ -25,14 +43,14 @@
   /*width: 100%;*/
   /*float: left;*/
   /*text-align: center;*/
-  display: block;
+
+  /*display: block;*/
   page-break-after:always;
-  page-break-inside: avoid;
+  page-break-inside: avoid;  
 
 }
 
-#field {
-  height: 500px;
+#field {/*Initial stuff*/
   background-color: #00FF00;
   position: relative;
   overflow: hidden;  
@@ -52,17 +70,13 @@
   max-height: 5%;
   position: absolute;
   transition: all 0.7s;
+  color: #8329543; /*TODO: Make this selectible by user*/
+  background: transparent;
 }
 
 .certiText {
   /*position: absolute;*/
   font-family: Verdana;
-  font-size: 20px;
-}
-
-input,textarea {
-  border: none;
-  background: transparent;
 }
 
 .upload-btn-wrapper {
@@ -80,6 +94,13 @@ input,textarea {
   border-radius: 8px;
   font-size: 20px;
   font-weight: bold;
+}
+.btn-tiny {
+  /*use class="btn btn-tiny"*/
+  padding: 4px 5px;
+  min-width: 35px;
+  border-radius: 5px;
+  font-size: 15px;
 }
 .selected {
   background-color: yellow;
