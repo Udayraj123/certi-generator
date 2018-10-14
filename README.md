@@ -9,6 +9,7 @@
 - [ ] An Overlay Grid (invisible in print)
 - [ ] Some opacity and styling
 - [ ] Toggles for UI - Hide Control panel, Text-aligns : left|right|centre, Stretch image: height|width
+	  Case: TitleCase|camelCase|UPPER|lower|Original
 - [ ] Fine adjustments by Arrow keys
 - [X] WSIWYG! -> Live move/type in the textfields
 	  ^ Make it movable on all pages!
