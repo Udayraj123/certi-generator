@@ -98,8 +98,8 @@
   var fontSelect = document.getElementById("font-select");
   // For createText
   var text_counter=1;
-  // textbox under focus
-  var textbox;
+  // focusedBox under focus
+  var focusedBox;
 
 
   // This width setting causes image overflow-
@@ -119,7 +119,6 @@
   [globalImageWidth/12,globalImageHeight/3*1.15,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
   [globalImageWidth/12,globalImageHeight/3*1.3,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
   [globalImageWidth/12,globalImageHeight/3*1.45,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
-  [globalImageWidth/12,globalImageHeight/3*1.6,""],
   // [globalImageWidth/12,globalImageHeight/3*1.25,"He plays an important role in making this world a better place."],
   ]
 
@@ -130,6 +129,9 @@
 // Utilities
 $.fn.exists = function () {
   return this.length !== 0;
+}
+function defined(x){
+  return typeof x !== "undefined";
 }
 </script>
 <script src="./assets/js/font-select.js"></script>
@@ -231,15 +233,15 @@ $.fn.exists = function () {
 
 <script>
   function focusTextBox(this_id){
-    if(typeof textbox !== "undefined"){
-      // bg style works when textbox isn't 'input'
-      // textbox.style.background="rgba(1,1,1,0.1)";
-      $('#'+textbox.id+' input').attr('disabled',false);
+    if(typeof focusedBox !== "undefined"){
+      // bg style works when focusedBox isn't 'input'
+      // focusedBox.style.background="rgba(1,1,1,0.1)";
+      // $('#'+focusedBox.id+' textarea').attr('disabled',false);
     }
-    textbox = document.getElementById(this_id);
-    $('#'+this_id+' input').attr('disabled',true);
-    // textbox.style.background="rgba(1,1,1,0.3)";
-    // textbox.focus();
+    focusedBox = document.getElementById(this_id);
+    // $('#'+this_id+' textarea').attr('disabled',true);
+    // focusedBox.style.background="rgba(1,1,1,0.3)";
+    // focusedBox.focus();
   }
   /*https://stackoverflow.com/questions/3392493/adjust-width-of-input-field-to-its-input*/
   function resizeInput(thiss){
@@ -252,7 +254,7 @@ $.fn.exists = function () {
       this_id = "text" + text_counter++;      
       $('.select-text').removeClass('selected');
 
-      selectButton='<button class="btn btn-small selected select-text" id="btn-'+this_id+'" data-id="'+this_id+'" >'+this_id+
+      selectButton='<button class="btn btn-small select-text" id="btn-'+this_id+'" data-id="'+this_id+'" >'+this_id+
       '&emsp;<span class="close">X</span>'+'</button>';
       $('#static-btn-grp').append(selectButton);
 
@@ -287,20 +289,19 @@ $.fn.exists = function () {
       
       // console.log(this_id);
       // console.log(textDiv);
-      // Trigger events
-      focusTextBox(this_id);
+      
+      // Trigger events to reflect on new textbox
       $titlePicker.change();
       fontChange();
       makeSizer(0);
-      return textDiv;
+      // return textDiv;
     }    
     
     //  Init the demo certi
-    var lastText;
     for ( var k in initText){
       pos=initText[k];
       // console.log(pos);
-      lastText=createText(pos[0]+'px',pos[1]+'px',pos[2]);      
+      createText(pos[0]+'px',pos[1]+'px',pos[2]);      
     }
     // '.close'    
     // $('#btn-'+lastText.id).remove();
@@ -318,11 +319,18 @@ $.fn.exists = function () {
         // you've not clicked on a descendant (like the close button).
         if (event.target !== this)
           return;
+        // 
         $('.select-text').removeClass('selected');
-        $(this).addClass('selected');
         this_id=$(this).attr('data-id');
         // console.log(this_id);
-        focusTextBox(this_id);
+        //toggle
+        if(defined(focusedBox) && this_id == focusedBox.id){
+          focusedBox=undefined;
+        }
+        else{
+          $(this).addClass('selected');
+          focusTextBox(this_id);
+        }
       });
 
       $("#static-btn-grp").on('click','.close',function(event) {
@@ -335,15 +343,19 @@ $.fn.exists = function () {
     });  
 
     field.onclick = function(event) {
-
+      
+      if(!defined(focusedBox)){
+        // nothing focussed
+        return;
+      }
       // window-relative field coordinates
       let fieldCoords = this.getBoundingClientRect();
 
-      // the textbox has position:absolute, the field: position:relative
-      // so textbox coordinates are relative to the field inner left-upper corner
+      // the focusedBox has position:absolute, the field: position:relative
+      // so focusedBox coordinates are relative to the field inner left-upper corner
       let textboxCoords = {
-        top: event.clientY - fieldCoords.top - field.clientTop + textboxMarginTop //- textbox.clientHeight / 2
-        ,left: event.clientX - fieldCoords.left - field.clientLeft + textboxMarginLeft //- textbox.clientWidth / 2
+        top: event.clientY - fieldCoords.top - field.clientTop + textboxMarginTop //- focusedBox.clientHeight / 2
+        ,left: event.clientX - fieldCoords.left - field.clientLeft + textboxMarginLeft //- focusedBox.clientWidth / 2
       };
       // TODO: Take these up from Arrow keys as well
 
@@ -354,13 +366,13 @@ $.fn.exists = function () {
       if (textboxCoords.left < 0) textboxCoords.left = 0;
 
       // // prevent crossing the right field boundary
-      if (textboxCoords.left + textbox.clientWidth > field.clientWidth) {
-        textboxCoords.left = field.clientWidth - textbox.clientWidth;
+      if (textboxCoords.left + focusedBox.clientWidth > field.clientWidth) {
+        textboxCoords.left = field.clientWidth - focusedBox.clientWidth;
       }
 
       // prevent crossing the bottom field boundary
-      if (textboxCoords.top + textbox.clientHeight > field.clientHeight) {
-        textboxCoords.top = field.clientHeight - textbox.clientHeight;
+      if (textboxCoords.top + focusedBox.clientHeight > field.clientHeight) {
+        textboxCoords.top = field.clientHeight - focusedBox.clientHeight;
       }
 
       function between(a,b,c){
@@ -372,12 +384,12 @@ $.fn.exists = function () {
       }
 
       // TODO: Make it work for input box
-      // if(between(textbox.style.left, textboxCoords.left,textbox.clientWidth) &&
-      //   between(textbox.style.top, textboxCoords.top,textbox.clientHeight))
+      // if(between(focusedBox.style.left, textboxCoords.left,focusedBox.clientWidth) &&
+      //   between(focusedBox.style.top, textboxCoords.top,focusedBox.clientHeight))
       //   return;
 
-      textbox.style.left = textboxCoords.left + 'px';
-      textbox.style.top = textboxCoords.top + 'px';
+      focusedBox.style.left = textboxCoords.left + 'px';
+      focusedBox.style.top = textboxCoords.top + 'px';
     }
   </script>
 
