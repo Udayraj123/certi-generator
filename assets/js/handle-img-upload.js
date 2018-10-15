@@ -34,8 +34,8 @@ function readImage (file) {
       
       // bg_image.width=globalScreenWidth;
       bg_image.height=globalScreenHeight;
-      // dummy.width=globalScreenWidth;
-      dummy.height=globalScreenHeight;
+      // certibg.width=globalScreenWidth;
+      certibg.height=globalScreenHeight;
       // Finally append our created bg_image and the HTML info string to our `#preview` 
       // elPreview.style.width = bg_image.width+"px"; 
       // elPreview.style.height = bg_image.height+"px"; 
@@ -56,7 +56,7 @@ function readImage (file) {
     // for file dimensions
     bg_image.src = useBlob ? window.URL.createObjectURL(file) : reader.result;
     // for actual visuals
-    dummy.src = useBlob ? window.URL.createObjectURL(file) : reader.result;
+    certibg.src = useBlob ? window.URL.createObjectURL(file) : reader.result;
 
   });
 

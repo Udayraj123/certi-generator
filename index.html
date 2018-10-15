@@ -252,11 +252,24 @@ $.fn.exists = function () {
       this_id = "text" + text_counter++;      
       $('.select-text').removeClass('selected');
 
-      selectButton='<button class="btn btn-small selected select-text" data-id="'+this_id+'" >'+this_id+
+      selectButton='<button class="btn btn-small selected select-text" id="btn-'+this_id+'" data-id="'+this_id+'" >'+this_id+
       '&emsp;<span class="close">X</span>'+'</button>';
       $('#static-btn-grp').append(selectButton);
 
-      textInput = '<input class="certiInput certiText" oninput="resizeInput(this)" type="text" value="'+sometext+'" style="width:'+sometext.length+'ch; font-size: '+fontSizeInt+'px;">';
+
+      textInput = document.createElement("textarea");
+      textInput.className="certiInput certiText";
+      textInput.style.width=(sometext.length+5)+'ch';
+      textInput.style.fontSize=fontSizeInt;
+      textInput.style.resize='none';
+      textInput.rows=2;
+      textInput.wrap='hard';
+      textInput.value=sometext;
+      textInput.oninput=function(e){resizeInput(this);};
+      // textInput = '<textarea class="certiInput certiText" oninput="resizeTextInput(this)" style="width:'+(sometext.length+5)+'ch;  font-size: '+fontSizeInt+'px;" rows="2" wrap="hard">'+sometext+'</textarea>';
+      // textInput = '<textarea class="certiInput certiText" style="width:'+globalImageWidth+'px; resize:none; font-size: '+fontSizeInt+'px;" rows="2" wrap="hard">'+sometext+'</textarea>';
+
+      // textInput = '<input type="text" class="certiInput certiText" oninput="resizeInput(this)" value="'+sometext+'" style="width:'+sometext.length+'ch; font-size: '+fontSizeInt+'px;">';
       // textInput = '<p class="single-line form-control certiText" contenteditable="true" style="font-size: '+fontSizeInt+'px;" >'+this_id+'</p>';
 
 
@@ -266,7 +279,8 @@ $.fn.exists = function () {
       textDiv.className="textDiv";
       textDiv.style.left=x;
       textDiv.style.top=y;      
-      textDiv.innerHTML = textInput;
+      // textDiv.innerHTML = textInput;
+      textDiv.appendChild(textInput);
       // field.appendChild(textDiv);
       // textDiv.insertBefore($('#certibg'));
       $('#certibg').before(textDiv);
@@ -278,13 +292,20 @@ $.fn.exists = function () {
       $titlePicker.change();
       fontChange();
       makeSizer(0);
+      return textDiv;
     }    
     
+    //  Init the demo certi
+    var lastText;
     for ( var k in initText){
       pos=initText[k];
-      console.log(pos);
-      createText(pos[0]+'px',pos[1]+'px',pos[2]);      
+      // console.log(pos);
+      lastText=createText(pos[0]+'px',pos[1]+'px',pos[2]);      
     }
+    // '.close'    
+    // $('#btn-'+lastText.id).remove();
+    // $('#'+lastText.id).remove();
+
 
     $(function() {
       // Register starter events   
@@ -308,6 +329,7 @@ $.fn.exists = function () {
         parent=$(this).parent();
         this_id=$(parent).attr('data-id');
         $('#'+this_id).remove();
+        // $('#btn-'+this_id).remove();
         parent.remove();
       });   
     });  
