@@ -73,7 +73,7 @@
   <div class="col-md-9">
     <div class="full-page-print" id="field">
       <!-- <img id="certibg" src="assets/images/landscape.jpg" style="position: relative; top: 0px; left:0px;height: 100%;width: 100%" alt="Please click 'Change Image' to add your template image." > -->
-      <img id="certibg" src="assets/images/portrait.jpg" style="position: relative; top: 0px; left:0px;" alt="Please click 'Change Image' to add your template image." >
+      <img id="certibg" src="assets/images/portrait2.jpg" style="position: relative; top: 0px; left:0px;" alt="Please click 'Change Image' to add your template image." >
     </div>
   </div>
 
@@ -82,18 +82,24 @@
 <script type="text/javascript">
   //CONFIGS HERE: 
   // For div containing image on RHS 
-  var globalScreenWidth = window.innerWidth;
-  var globalScreenHeight =  window.innerHeight;
-  $('#certibg').height(globalScreenHeight-50);
+  var globalViewportWidth = window.innerWidth;
+  var globalViewportHeight =  window.innerHeight;
+  var globalDocumentHeight =  document.body.clientHeight;
+  var globalScreenHeight =  screen.height;
+  var globalScreenWidth =  screen.width;
+  console.log(globalScreenHeight,globalViewportHeight,globalDocumentHeight)
+  $('.full-page-print').height(globalScreenHeight);
+  $('#certibg').height('100%');
+
   var globalImageWidth = $('#certibg').width();
   var globalImageHeight = $('#certibg').height();
 
   field = document.getElementById("field");
   // 1853 953
-  // console.log(globalScreenWidth,globalScreenHeight)
+  // console.log(globalViewportWidth,globalViewportHeight)
 
   // For font change
-  var fontSizeInt=Math.max(15,20*globalScreenWidth/2000) ;// default font size
+  var fontSizeInt=Math.max(15,20*globalViewportWidth/2000) ;// default font size
   var textSelector = ".certiText";
   var fontSelect = document.getElementById("font-select");
   // For createText
@@ -104,8 +110,8 @@
 
   // This width setting causes image overflow-
 
-  // field.style.width = globalScreenWidth+"px"; 
-  // field.style.height = globalScreenHeight+"px"; 
+  // field.style.width = globalViewportWidth+"px"; 
+  // field.style.height = globalViewportHeight+"px"; 
 
   var TextData = [
   ['text-1-1','text-1-2','text-1-3'],
@@ -114,11 +120,11 @@
   ];
 
   var initText = [
-  [globalImageWidth/4,globalImageHeight/4,"Certificate of Appreciation"],
-  [globalImageWidth/12,globalImageHeight/3,"To whomsoever it may concern"],
-  [globalImageWidth/12,globalImageHeight/3*1.15,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
-  [globalImageWidth/12,globalImageHeight/3*1.3,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
-  [globalImageWidth/12,globalImageHeight/3*1.45,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+  [globalImageWidth/3.5,globalImageHeight/4,"Certificate of Appreciation"],
+  [globalImageWidth/6,globalImageHeight/3,"To whomsoever it may concern"],
+  [globalImageWidth/6,globalImageHeight/3*1.15,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+  [globalImageWidth/6,globalImageHeight/3*1.3,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+  [globalImageWidth/6,globalImageHeight/3*1.45,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
   // [globalImageWidth/12,globalImageHeight/3*1.25,"He plays an important role in making this world a better place."],
   ]
 
@@ -209,8 +215,8 @@ function defined(x){
       allTextDivs.each(function(i,e){
         $(e).css('border','none');
         currTop = $(e).position().top;// currTop = parseFloat($(e).css('top'));
-        $(e).css('top',currTop + row_no*globalScreenHeight);
-        console.log(currTop + row_no*globalScreenHeight);
+        $(e).css('top',currTop + row_no*globalViewportHeight);
+        console.log(currTop + row_no*globalViewportHeight);
       });
       
     });
@@ -243,9 +249,13 @@ function defined(x){
     // focusedBox.style.background="rgba(1,1,1,0.3)";
     // focusedBox.focus();
   }
-  /*https://stackoverflow.com/questions/3392493/adjust-width-of-input-field-to-its-input*/
+  /*https://stackoverflow.com/questions/3392493/adjust-width-of-input-field-to-its-input*/  
   function resizeInput(thiss){
-    thiss.style.width = (thiss.value.length + 5) + "ch";
+    lines = thiss.value.split(/\r\n|\r|\n/);
+    thiss.rows=Math.max(2,lines.length);
+    longest = Math.max.apply(null,lines.map(w => w.length));
+    // longest = Math.max(5,lines.reduce(function (a, b) { return a.length > b.length ? a.length : b.length; }));
+    thiss.style.width = (longest + 5) + "ch";
   }
   function createText(x,y,sometext)
   {

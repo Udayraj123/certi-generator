@@ -32,10 +32,10 @@ function readImage (file) {
           console.log(imageInfo);
       //width distorts portrait mode certis
       
-      // bg_image.width=globalScreenWidth;
-      bg_image.height=globalScreenHeight;
-      // certibg.width=globalScreenWidth;
-      certibg.height=globalScreenHeight;
+      // bg_image.width=globalViewportWidth;
+      bg_image.height=globalViewportHeight;
+      // certibg.width=globalViewportWidth;
+      certibg.height=globalViewportHeight;
       // Finally append our created bg_image and the HTML info string to our `#preview` 
       // elPreview.style.width = bg_image.width+"px"; 
       // elPreview.style.height = bg_image.height+"px"; 
