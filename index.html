@@ -19,12 +19,8 @@
 
 <body>
   <div class="row">
-    <div class="no-print col-md-3">
-      <div class="upload-btn-wrapper">
-        <button class="btn">Load Template</button>
-        <input type="file" id="browse" />
-      </div>
-      <hr>
+
+    <div class="no-print col-md-3" style="padding-left: 2%; padding-top: 2%">
       <div class="upload-btn-wrapper">
         <div id="static-btn-grp">
           <button class="btn createText"> Add Text Field </button>
@@ -32,40 +28,105 @@
       </div>
       <hr>
       <div class="upload-btn-wrapper">
-        <button class="btn" style="color: maroon" onclick="window.location.href+=''"> Reset All </button>
+        <button class="btn">Change Image</button>
+        <input type="file" id="browse" />
+      </div>
+        <hr>
+      <div class="upload-btn-wrapper">
+        <button id="printBtn" class="btn" style="color: maroon" onclick="doPrint(TextData)"> Print </button>
+        <!-- <input type="number" name="quantity" value="1"> -->
+        &emsp;
+        <button id="resetBtn" class="btn" style="color: maroon" onclick="window.location.href+=''"> Reset </button>
       </div>
       <hr>
       <div class="upload-btn-wrapper">
-       <h4> <b>Change Font</b>
+        <h4> <b>Font: </b>
+         <select id='font-select' onChange = "return fontChange();"> </select>
+       <b>Size: </b>
          <button class="btn btn-tiny" style="color: maroon" onclick="makeSizer(2.5)"> + </button>
          <button class="btn btn-tiny" style="color: maroon" onclick="makeSizer(-2.5)"> - </button>
        </h4>
-       <select id='font-select' onChange = "return fontChange();"> </select>
      </div>
      <p>
-      <input id="titler" type="colour" placeholder="brown" value="black" aria-label="Header Colour">
+      <h4><b>Color: </b>
+        <input id="titler" type="colour" placeholder="brown" value="black" aria-label="Header Colour">
+      </h4>
     </p>
     <hr>
-    <div class="upload-btn-wrapper">
-      <button class="btn" style="color: maroon" onclick="doPrint(TextData)"> Print </button>
-    </div>
-    <hr>
-    <div class="upload-btn-wrapper">
-      <button class="btn btn-tiny" style="color: maroon"> <a target="_blank" href="https://www.youtube.com/watch?v=ZfrQRjsW6oU"> Alternative (using MS Word) </a></button>
-    </div>
-    <hr>
+    <h3>Welcome to Simple Certificate Generator! </h3>
+    <p> A fast, lightweight and easy way to make certificates completely in your browser!</p>
+
+    <h4>Guide</h4>
+    <ul style="font-size: 16px">
+      <li>Select any text box to edit it</li>
+      <li>To move a text box, first select it in above menu (yellow highlight)</li>
+      <li>Click 'Add Text Field' to place new text on image</li>
+      <li>Click 'Change Image' to add new background image</li>
+      <li>For everything else: <i>Just follow your intuition</i></li>
+      <!-- <li> Don't worry if image is outside screen while editing, it would align properly in the print preview screen. </li> -->
+    </ul>
+    <p><b>Note: </b> In Print Preview: Remember to uncheck 'Headers and Footers', and choose Landscape Mode(if needed).</p>
+    <p>Support for bulk generation is under development. Until then, see <a target="_blank" href="https://www.youtube.com/watch?v=ZfrQRjsW6oU"> <i>How to make certificates using MS Word </i></a></p>
   </div>
 
   <!-- Main play area -->
   <div class="col-md-9">
     <div class="full-page-print" id="field">
-      <img id="dummy" style="position: relative; top: 0px; left:0px;height: 100%;width: 100%" alt="Please click 'Load Template' to add your template." >
+      <!-- <img id="certibg" src="assets/images/landscape.jpg" style="position: relative; top: 0px; left:0px;height: 100%;width: 100%" alt="Please click 'Change Image' to add your template image." > -->
+      <img id="certibg" src="assets/images/portrait.jpg" style="position: relative; top: 0px; left:0px;" alt="Please click 'Change Image' to add your template image." >
     </div>
   </div>
 
 </div>
 
 <script type="text/javascript">
+  //CONFIGS HERE: 
+  // For div containing image on RHS 
+  var globalScreenWidth = window.innerWidth;
+  var globalScreenHeight =  window.innerHeight;
+  $('#certibg').height(globalScreenHeight-50);
+  var globalImageWidth = $('#certibg').width();
+  var globalImageHeight = $('#certibg').height();
+
+  field = document.getElementById("field");
+  // 1853 953
+  // console.log(globalScreenWidth,globalScreenHeight)
+
+  // For font change
+  var fontSizeInt=Math.max(15,20*globalScreenWidth/2000) ;// default font size
+  var textSelector = ".certiText";
+  var fontSelect = document.getElementById("font-select");
+  // For createText
+  var text_counter=1;
+  // textbox under focus
+  var textbox;
+
+
+  // This width setting causes image overflow-
+
+  // field.style.width = globalScreenWidth+"px"; 
+  // field.style.height = globalScreenHeight+"px"; 
+
+  var TextData = [
+  ['text-1-1','text-1-2','text-1-3'],
+  ['text-2-1','text-2-2','text-2-3'],
+  ['text-3-1','text-3-2','text-3-3'],
+  ];
+
+  var initText = [
+  [globalImageWidth/4,globalImageHeight/4,"Certificate of Appreciation"],
+  [globalImageWidth/12,globalImageHeight/3,"To whomsoever it may concern"],
+  [globalImageWidth/12,globalImageHeight/3*1.15,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+  [globalImageWidth/12,globalImageHeight/3*1.3,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+  [globalImageWidth/12,globalImageHeight/3*1.45,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+  [globalImageWidth/12,globalImageHeight/3*1.6,""],
+  // [globalImageWidth/12,globalImageHeight/3*1.25,"He plays an important role in making this world a better place."],
+  ]
+
+
+  var textboxMarginTop=0;
+  var textboxMarginLeft=0;
+  var textboxClickMargin=10;
 // Utilities
 $.fn.exists = function () {
   return this.length !== 0;
@@ -73,9 +134,6 @@ $.fn.exists = function () {
 </script>
 <script src="./assets/js/font-select.js"></script>
 <script type="text/javascript">
-  // For font change
-  var textSelector = ".certiText";
-  var fontSelect = document.getElementById("font-select");
   function fontChange(){
     if($(textSelector).exists()){
       var x = fontSelect.selectedIndex;
@@ -83,7 +141,6 @@ $.fn.exists = function () {
       $(textSelector).css("font-family",y[x].value);
     }  
   }  
-  var fontSizeInt=20;// default font size
   function makeSizer(size) {
     if($(textSelector).exists()){
       fontSizeInt = parseFloat($(textSelector).css('font-size').replace('px', ''));
@@ -108,17 +165,7 @@ $.fn.exists = function () {
   }).change();
 </script>
 
-<script>
-
-  var globalScreenWidth = window.innerWidth;
-  var globalScreenHeight =  window.innerHeight;
-  var TextData = [
-  ['text-1-1','text-1-2','text-1-3'],
-  ['text-2-1','text-2-2','text-2-3'],
-  ['text-3-1','text-3-2','text-3-3'],
-  ];
-  var textboxMarginTop=0;
-  var textboxMarginLeft=0;
+<script type="text/javascript"> 
     /*
   M1 - Use selector to loop on text inputs. And on those indices put the corresponding text. Should do.
   Outer loop would still be on the rows.
@@ -127,6 +174,9 @@ $.fn.exists = function () {
   */
   var processedOnce=0,temp=1;
   function doPrint(TextData){
+    // do for Single image right now
+    processedOnce = 1;
+
     if(processedOnce==0){
 
       processedOnce = 1;
@@ -138,7 +188,7 @@ $.fn.exists = function () {
         // parent.append("<br>");
         parent.append(clonedDiv);
         thisImg = $('#'+field_id +' img');
-        thisImg.attr("id","dummy"+temp++);
+        thisImg.attr("id","certibg"+temp++);
         // img{display: block; height: 100%;}
         thisImg.css('display','block');
         thisImg.css('height','100%');
@@ -166,52 +216,60 @@ $.fn.exists = function () {
     } else{
       console.log("Already processed input, continuing to print");
     }
-// window.print();
+    
+    // disable all btns
+    // $('.btn').attr('disabled',true)
+    // $('#printBtn').attr('disabled',false)
+    // $('#resetBtn').attr('disabled',false)
 
-}
+    window.print();
+
+  }
 
 </script>
 <script src="./assets/js/handle-img-upload.js"></script>
 
 <script>
-
-
-  var text_counter=1;
-  var textbox;
-  field = document.getElementById("field");
-  field.style.width = globalScreenWidth+"px"; 
-  field.style.height = globalScreenHeight+"px"; 
-
   function focusTextBox(this_id){
     if(typeof textbox !== "undefined"){
-      textbox.style.background="rgba(1,1,1,0.1)";
+      // bg style works when textbox isn't 'input'
+      // textbox.style.background="rgba(1,1,1,0.1)";
+      $('#'+textbox.id+' input').attr('disabled',false);
     }
     textbox = document.getElementById(this_id);
-    textbox.style.background="rgba(1,1,1,0.3)";
+    $('#'+this_id+' input').attr('disabled',true);
+    // textbox.style.background="rgba(1,1,1,0.3)";
+    // textbox.focus();
   }
-
-  function createText()
+  /*https://stackoverflow.com/questions/3392493/adjust-width-of-input-field-to-its-input*/
+  function resizeInput(thiss){
+    thiss.style.width = (thiss.value.length + 5) + "ch";
+  }
+  function createText(x,y,sometext)
   {
       // field.style.cursor="pointer";
-      this_id = "column" + text_counter++;      
+      // this_id = "column" + text_counter++;      
+      this_id = "text" + text_counter++;      
       $('.select-text').removeClass('selected');
 
-      selectButton='<button class="btn selected select-text" data-id="'+this_id+'" >'+this_id+
+      selectButton='<button class="btn btn-small selected select-text" data-id="'+this_id+'" >'+this_id+
       '&emsp;<span class="close">X</span>'+'</button>';
       $('#static-btn-grp').append(selectButton);
-      // textInput = '<input class="certiText" type="text" value="'+this_id+'">';
-      textInput = '<p class="certiText" style="width:100px;" >'+this_id+'</p>';
-      //^ contenteditable="true"
 
+      textInput = '<input class="certiInput certiText" oninput="resizeInput(this)" type="text" value="'+sometext+'" style="width:'+sometext.length+'ch; font-size: '+fontSizeInt+'px;">';
+      // textInput = '<p class="single-line form-control certiText" contenteditable="true" style="font-size: '+fontSizeInt+'px;" >'+this_id+'</p>';
+
+
+      // overflow: hidden; does keep it single line
       textDiv = document.createElement('div');
       textDiv.id=this_id;
       textDiv.className="textDiv";
-      textDiv.style.left="0.1%";
-      textDiv.style.top="0.1%";      
+      textDiv.style.left=x;
+      textDiv.style.top=y;      
       textDiv.innerHTML = textInput;
       // field.appendChild(textDiv);
-      // textDiv.insertBefore($('#dummy'));
-      $('#dummy').before(textDiv);
+      // textDiv.insertBefore($('#certibg'));
+      $('#certibg').before(textDiv);
       
       // console.log(this_id);
       // console.log(textDiv);
@@ -221,11 +279,18 @@ $.fn.exists = function () {
       fontChange();
       makeSizer(0);
     }    
-    // createText();
+    
+    for ( var k in initText){
+      pos=initText[k];
+      console.log(pos);
+      createText(pos[0]+'px',pos[1]+'px',pos[2]);      
+    }
+
     $(function() {
+      // Register starter events   
 
       $("#static-btn-grp").on('click','.createText',function(event) {
-        createText();
+        createText('50%','50%',"sometext");
       });
 
       $("#static-btn-grp").on('click','.select-text',function(event) {
@@ -245,7 +310,7 @@ $.fn.exists = function () {
         $('#'+this_id).remove();
         parent.remove();
       });   
-    });   
+    });  
 
     field.onclick = function(event) {
 
@@ -275,6 +340,19 @@ $.fn.exists = function () {
       if (textboxCoords.top + textbox.clientHeight > field.clientHeight) {
         textboxCoords.top = field.clientHeight - textbox.clientHeight;
       }
+
+      function between(a,b,c){
+        a = parseFloat(a.replace('px', ''));
+        a -= textboxClickMargin;
+        c += 2*textboxClickMargin;
+        // console.log(a,b,a+c);
+        return b >= a && a+c >= b;
+      }
+
+      // TODO: Make it work for input box
+      // if(between(textbox.style.left, textboxCoords.left,textbox.clientWidth) &&
+      //   between(textbox.style.top, textboxCoords.top,textbox.clientHeight))
+      //   return;
 
       textbox.style.left = textboxCoords.left + 'px';
       textbox.style.top = textboxCoords.top + 'px';

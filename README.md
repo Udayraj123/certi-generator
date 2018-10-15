@@ -1,12 +1,16 @@
 ### TODO
 - [X] Portrait mode support
 - [X] Fonts- Family, Colors and Sizes
+- [ ] Default demo template 
+- [ ] Clean assets folder
 - [ ] Image Padding -> Select Chrome's margins
 - [ ] doPrint from CSV
 - [ ] doPrint from Text Area
 
-### Extras TODO
+### Further TODO
+- [ ] Another demo of portrait image
 - [ ] An Overlay Grid (invisible in print)
+- [ ] Image operator(jquery) - rotate 90, brightness, etc
 - [ ] Some opacity and styling
 - [ ] Toggles for UI - Hide Control panel, Text-aligns : left|right|centre, Stretch image: height|width
 	  Case: TitleCase|camelCase|UPPER|lower|Original

@@ -51,7 +51,8 @@
 }
 
 #field {/*Initial stuff*/
-  background-color: #00FF00;
+  background-color: white;
+  /*background-color: #00FF00;*/
   position: relative;
   overflow: hidden;  
 }
@@ -69,13 +70,39 @@
   max-width: 15%;
   max-height: 5%;
   position: absolute;
-  transition: all 0.7s;
+  /*The animation line: */
+  transition: all 0.3s;
   color: #8329543; /*TODO: Make this selectible by user*/
   background: transparent;
 }
 
+/*https://stackoverflow.com/questions/3397113/how-to-remove-border-outline-around-text-input-boxes-chrome*/
+/*textarea:focus, input:focus{
+  outline: none;
+}*/
+
+/*https://stackoverflow.com/questions/6831482/contenteditable-single-line-input*/
+[contenteditable="true"].single-line {
+  white-space: nowrap;
+  width:200px;
+  overflow: hidden;
+} 
+[contenteditable="true"].single-line br {
+  display:none;
+}
+
+[contenteditable="true"].single-line * {
+  /*single line part*/
+  display:inline;
+  white-space:nowrap;
+}
+
+.certiInput {
+  width: 20ch;
+  border: 0 none transparent;
+}
 .certiText {
-  /*position: absolute;*/
+  position: absolute;
   font-family: Verdana;
 }
 
