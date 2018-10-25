@@ -31,7 +31,7 @@
         <button class="btn">Change Image</button>
         <input type="file" id="browse" />
       </div>
-        <hr>
+      <hr>
       <div class="upload-btn-wrapper">
         <button id="printBtn" class="btn" style="color: maroon" onclick="doPrint(TextData)"> Print </button>
         <!-- <input type="number" name="quantity" value="1"> -->
@@ -42,7 +42,7 @@
       <div class="upload-btn-wrapper">
         <h4> <b>Font: </b>
          <select id='font-select' onChange = "return fontChange();"> </select>
-       <b>Size: </b>
+         <b>Size: </b>
          <button class="btn btn-tiny" style="color: maroon" onclick="makeSizer(2.5)"> + </button>
          <button class="btn btn-tiny" style="color: maroon" onclick="makeSizer(-2.5)"> - </button>
        </h4>
@@ -81,67 +81,45 @@
 
 <script type="text/javascript">
   //CONFIGS HERE: 
-  // For div containing image on RHS 
-  var globalViewportWidth = window.innerWidth;
-  var globalViewportHeight =  window.innerHeight;
-  var globalDocumentHeight =  document.body.clientHeight;
-  var globalScreenHeight =  screen.height;
-  var globalScreenWidth =  screen.width;
-  console.log(globalScreenHeight,globalViewportHeight,globalDocumentHeight)
-  $('.full-page-print').height(globalScreenHeight);
-  $('#certibg').height('100%');
-
-  var globalImageWidth = $('#certibg').width();
-  var globalImageHeight = $('#certibg').height();
-
-  field = document.getElementById("field");
-  // 1853 953
-  // console.log(globalViewportWidth,globalViewportHeight)
-
-  // For font change
-  var fontSizeInt=Math.max(15,20*globalViewportWidth/2000) ;// default font size
-  var textSelector = ".certiText";
-  var fontSelect = document.getElementById("font-select");
-  // For createText
-  var text_counter=1;
-  // focusedBox under focus
-  var focusedBox;
-
-
-  // This width setting causes image overflow-
-
-  // field.style.width = globalViewportWidth+"px"; 
-  // field.style.height = globalViewportHeight+"px"; 
-
   var TextData = [
   ['text-1-1','text-1-2','text-1-3'],
   ['text-2-1','text-2-2','text-2-3'],
   ['text-3-1','text-3-2','text-3-3'],
   ];
 
-  var initText = [
-  [globalImageWidth/3.5,globalImageHeight/4,"Certificate of Appreciation"],
-  [globalImageWidth/6,globalImageHeight/3,"To whomsoever it may concern"],
-  [globalImageWidth/6,globalImageHeight/3*1.15,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
-  [globalImageWidth/6,globalImageHeight/3*1.3,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
-  [globalImageWidth/6,globalImageHeight/3*1.45,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
-  // [globalImageWidth/12,globalImageHeight/3*1.25,"He plays an important role in making this world a better place."],
-  ]
-
-
   var textboxMarginTop=0;
   var textboxMarginLeft=0;
   var textboxClickMargin=10;
-// Utilities
-$.fn.exists = function () {
-  return this.length !== 0;
-}
-function defined(x){
-  return typeof x !== "undefined";
-}
+
+  // For div containing image on RHS 
+  var globalViewportWidth;
+  var globalViewportHeight;
+  var globalDocumentHeight;
+  var globalScreenHeight;
+  var globalScreenWidth;
+  var globalImageWidth;
+  var globalImageHeight;
+  var field;
+
+  // For font change
+  var fontSizeInt=Math.max(15,20*globalViewportWidth/2000) ;// default font size
+  var textSelector = ".certiText";
+  var fontSelect;
+  // For createText
+  var text_counter=1;
+  // focusedBox under focus
+  var focusedBox;
+
 </script>
 <script src="./assets/js/font-select.js"></script>
 <script type="text/javascript">
+  // Utilities
+  $.fn.exists = function () {
+    return this.length !== 0;
+  }
+  function defined(x){
+    return typeof x !== "undefined";
+  }
   function fontChange(){
     if($(textSelector).exists()){
       var x = fontSelect.selectedIndex;
@@ -306,19 +284,9 @@ function defined(x){
       makeSizer(0);
       // return textDiv;
     }    
-    
-    //  Init the demo certi
-    for ( var k in initText){
-      pos=initText[k];
-      // console.log(pos);
-      createText(pos[0]+'px',pos[1]+'px',pos[2]);      
-    }
-    // '.close'    
-    // $('#btn-'+lastText.id).remove();
-    // $('#'+lastText.id).remove();
-
-
-    $(function() {
+    // $(function() {
+    // https://stackoverflow.com/questions/4584373/difference-between-window-load-and-document-ready-functions
+    $(window).load(function() {
       // Register starter events   
 
       $("#static-btn-grp").on('click','.createText',function(event) {
@@ -350,14 +318,46 @@ function defined(x){
         // $('#btn-'+this_id).remove();
         parent.remove();
       });   
-    });  
-
-    field.onclick = function(event) {
       
-      if(!defined(focusedBox)){
-        // nothing focussed
-        return;
+      globalViewportWidth = window.innerWidth;
+      globalViewportHeight =  window.innerHeight;
+      globalDocumentHeight =  document.body.clientHeight;
+      globalScreenHeight =  screen.height;
+      globalScreenWidth =  screen.width;
+      console.log(globalScreenHeight,globalViewportHeight,globalDocumentHeight)
+      $('.full-page-print').height(globalScreenHeight);
+      $('#certibg').height('100%');
+      globalImageWidth = $('#certibg').width();
+      globalImageHeight = $('#certibg').height();
+      fontSelect = document.getElementById("font-select");
+
+
+      var initText = [
+      [globalImageWidth/3.5,globalImageHeight/4,"Certificate of Appreciation"],
+      [globalImageWidth/6,globalImageHeight/3,"To whomsoever it may concern"],
+      [globalImageWidth/6,globalImageHeight/3*1.15,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+      [globalImageWidth/6,globalImageHeight/3*1.3,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+      [globalImageWidth/6,globalImageHeight/3*1.45,"This is to certify that Mr. Udayraj Deshmukh is Awesome."],
+      // [globalImageWidth/12,globalImageHeight/3*1.25,"He plays an important role in making this world a better place."],
+      ]
+
+      //  Init the demo certi
+      for ( var k in initText){
+        pos=initText[k];
+        // console.log(pos);
+        createText(pos[0]+'px',pos[1]+'px',pos[2]);      
       }
+      // '.close'    
+      // $('#btn-'+lastText.id).remove();
+      // $('#'+lastText.id).remove();
+
+      field = document.getElementById("field");
+      field.onclick = function(event) {
+
+        if(!defined(focusedBox)){
+          // nothing focussed
+          return;
+        }
       // window-relative field coordinates
       let fieldCoords = this.getBoundingClientRect();
 
@@ -385,13 +385,13 @@ function defined(x){
         textboxCoords.top = field.clientHeight - focusedBox.clientHeight;
       }
 
-      function between(a,b,c){
-        a = parseFloat(a.replace('px', ''));
-        a -= textboxClickMargin;
-        c += 2*textboxClickMargin;
-        // console.log(a,b,a+c);
-        return b >= a && a+c >= b;
-      }
+      // function between(a,b,c){
+      //   a = parseFloat(a.replace('px', ''));
+      //   a -= textboxClickMargin;
+      //   c += 2*textboxClickMargin;
+      //   // console.log(a,b,a+c);
+      //   return b >= a && a+c >= b;
+      // }
 
       // TODO: Make it work for input box
       // if(between(focusedBox.style.left, textboxCoords.left,focusedBox.clientWidth) &&
@@ -401,7 +401,16 @@ function defined(x){
       focusedBox.style.left = textboxCoords.left + 'px';
       focusedBox.style.top = textboxCoords.top + 'px';
     }
-  </script>
+    // 1853 953
+    console.log(globalViewportWidth,globalViewportHeight)
+    console.log(globalImageWidth,globalImageWidth)
+  })
+
+  // This width setting causes image overflow-
+  // field.style.width = globalViewportWidth+"px"; 
+  // field.style.height = globalViewportHeight+"px"; 
+
+</script>
 
 
 </body></html>
